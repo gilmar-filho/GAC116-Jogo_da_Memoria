@@ -99,9 +99,8 @@ body {
     border: 2px solid var(--primary-light);
     border-radius: 0.5rem;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: grid; 
+    place-items: center;
     font-size: 2rem;
     font-weight: 700;
     transition: all 0.3s ease;
@@ -112,4 +111,41 @@ body {
 .card:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+}
+
+.card.flipped {
+    background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+    border-color: #ec4899;
+}
+
+.card::before {
+    content: '?';
+    transition: opacity 0.3s ease;
+    opacity: 1;
+}
+
+.card::before,
+.card-inner {
+    grid-area: 1 / 1;
+}
+
+.card.flipped::before {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.card-inner {
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    opacity: 0;
+    transition: opacity 0.3s ease 0.15s;
+}
+
+.card.flipped .card-inner {
+    opacity: 1;
+}
+
+.card.disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
 }

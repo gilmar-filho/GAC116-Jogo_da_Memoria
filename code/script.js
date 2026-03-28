@@ -28,11 +28,6 @@ const DOM = {
     gameBoard: document.getElementById('gameBoard')
 };
 
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Inicializando jogo...');
-    initGame();
-});
-
 function initGame() {
     resetGameState();
     generateCards();
@@ -81,7 +76,37 @@ function renderBoard() {
         const cardElement = document.createElement('div');
         cardElement.className = 'card';
         cardElement.id = `card-${card.id}`;
-        cardElement.textContent = '?';
         DOM.gameBoard.appendChild(cardElement);
+
+        const innerElement = document.createElement('div');
+        innerElement.className = 'card-inner';
+        innerElement.textContent = card.emoji;
+        cardElement.appendChild(innerElement);
+
+        cardElement.addEventListener('click', () => handleCardClick(card.id));
     });
 }
+
+function handleCardClick(cardId) {
+    const card = gameState.cards[cardId];
+    
+    if (card.flipped || card.matched) return;
+    
+    card.flipped = true;
+    gameState.flippedCards.push(card);
+    updateCardVisual(cardId);
+}
+
+function updateCardVisual(cardId) {
+    const cardElement = document.getElementById(`card-${cardId}`);
+    cardElement.classList.add('flipped');
+}
+
+function attachEventListeners() {
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Inicializando jogo...');
+    initGame();
+    attachEventListeners();
+});
