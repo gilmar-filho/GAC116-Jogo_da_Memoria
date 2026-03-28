@@ -76,7 +76,6 @@ function renderBoard() {
         const cardElement = document.createElement('div');
         cardElement.className = 'card';
         cardElement.id = `card-${card.id}`;
-        DOM.gameBoard.appendChild(cardElement);
 
         const innerElement = document.createElement('div');
         innerElement.className = 'card-inner';
@@ -84,17 +83,32 @@ function renderBoard() {
         cardElement.appendChild(innerElement);
 
         cardElement.addEventListener('click', () => handleCardClick(card.id));
+        
+        DOM.gameBoard.appendChild(cardElement);
     });
 }
 
 function handleCardClick(cardId) {
+    // Bloqueia cliques se jogo acabou ou se já tem 2 cartas viradas
+    if (gameState.gameOver || gameState.gameWon) return;
+    if (gameState.flippedCards.length >= 2) return;
+    
     const card = gameState.cards[cardId];
     
+    // Bloqueia se já está virada ou já é um par
     if (card.flipped || card.matched) return;
     
+    // Vira a carta
     card.flipped = true;
     gameState.flippedCards.push(card);
+    
+    // Atualiza visual
     updateCardVisual(cardId);
+    
+    // Se virou a segunda carta, verifica
+    if (gameState.flippedCards.length === 2) {
+        checkMatch();
+    }
 }
 
 function updateCardVisual(cardId) {
@@ -102,7 +116,78 @@ function updateCardVisual(cardId) {
     cardElement.classList.add('flipped');
 }
 
+function checkMatch() {
+    const [card1, card2] = gameState.flippedCards;
+    
+    // Bloqueia cliques enquanto verifica
+    disableAllCards();
+    
+    // Aguarda um pouco antes de verificar (pra ver as duas cartas)
+    setTimeout(() => {
+        if (card1.emoji === card2.emoji) {
+            // ENCONTROU PAR!
+            card1.matched = true;
+            card2.matched = true;
+            gameState.matchedPairs++;
+            
+            // Marca como matched visualmente
+            document.getElementById(`card-${card1.id}`).classList.add('matched');
+            document.getElementById(`card-${card2.id}`).classList.add('matched');
+            
+            // Incrementa movimentos
+            gameState.moves++;
+            
+            // Reseta flipped cards
+            gameState.flippedCards = [];
+            
+            // Desbloqueia cartas
+            enableAllCards();
+            
+            // Verifica se ganhou
+            if (gameState.matchedPairs === gameState.totalPairs) {
+                endGameVictory();
+            }
+        } else {
+            // NÃO é par - vira de volta
+            card1.flipped = false;
+            card2.flipped = false;
+            
+            document.getElementById(`card-${card1.id}`).classList.remove('flipped');
+            document.getElementById(`card-${card2.id}`).classList.remove('flipped');
+            
+            // Incrementa movimentos
+            gameState.moves++;
+            
+            // Reseta flipped cards
+            gameState.flippedCards = [];
+            
+            // Desbloqueia cartas
+            enableAllCards();
+        }
+    }, 1000);
+}
+
+function disableAllCards() {
+    document.querySelectorAll('.card').forEach(el => {
+        el.style.pointerEvents = 'none';
+    });
+}
+
+function enableAllCards() {
+    document.querySelectorAll('.card').forEach(el => {
+        el.style.pointerEvents = 'auto';
+    });
+}
+
+function endGameVictory() {
+    gameState.gameWon = true;
+    gameState.gameOver = true;
+    console.log('🎉 Você venceu!');
+    console.log(`Movimentos: ${gameState.moves}`);
+}
+
 function attachEventListeners() {
+    // Por enquanto vazio
 }
 
 document.addEventListener('DOMContentLoaded', function() {
