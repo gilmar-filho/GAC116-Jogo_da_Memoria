@@ -269,10 +269,57 @@ function endGameVictory() {
     setTimeout(() => document.getElementById('victoryModal').classList.add('active'), 500);
 }
 
+function showRankingModal(difficulty = gameState.currentDifficulty) {
+    const scores = JSON.parse(localStorage.getItem('memoryScores')) || [];
+    
+    // Filtra por dificuldade, ordena por score (maior primeiro) e pega o top 5
+    const filteredScores = scores
+        .filter(s => s.difficulty === difficulty)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 5);
+    
+    const rankingList = document.getElementById('rankingList');
+    rankingList.innerHTML = '';
+    
+    if (filteredScores.length === 0) {
+        rankingList.innerHTML = '<p style="text-align: center; color: var(--text-tertiary);">Nenhum score nesta dificuldade.</p>';
+    } else {
+        filteredScores.forEach((score, index) => {
+            const item = document.createElement('div');
+            item.className = 'ranking-item';
+            item.innerHTML = `
+                <div class="ranking-position">${index + 1}º</div>
+                <div class="ranking-info">
+                    <div class="ranking-name">Score: ${score.score}</div>
+                    <div class="ranking-date">${score.date}</div>
+                </div>
+                <div class="ranking-stats">
+                    <div class="ranking-stat">
+                        <span class="ranking-stat-label">Tempo</span>
+                        <span class="ranking-stat-value">${score.time}</span>
+                    </div>
+                    <div class="ranking-stat">
+                        <span class="ranking-stat-label">Movimentos</span>
+                        <span class="ranking-stat-value">${score.moves}</span>
+                    </div>
+                </div>
+            `;
+            rankingList.appendChild(item);
+        });
+    }
+    
+    // Atualiza o título do modal com a dificuldade selecionada
+    document.getElementById('rankingDifficulty').textContent = CONFIG.difficulties[difficulty].name;
+    
+    // Exibe o modal de ranking
+    document.getElementById('rankingModal').classList.add('active');
+}
+
 function attachEventListeners() {
     const restartBtn = document.getElementById('restartBtn');
     const resetBtn = document.getElementById('resetBtn');
     const menuBtn = document.getElementById('menuBtn');
+    const rankingBtn = document.getElementById('rankingBtn');
 
     if (restartBtn) {
         restartBtn.addEventListener('click', () => {
@@ -297,6 +344,12 @@ function attachEventListeners() {
         menuBtn.addEventListener('click', showMenuModal);
     }
 
+    if (rankingBtn) {
+        rankingBtn.addEventListener('click', () => {
+            showRankingModal(); // Usa a dificuldade atual por padrão
+        });
+    }
+
     document.querySelectorAll('.btn-difficulty').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const difficulty = parseInt(e.currentTarget.getAttribute('data-difficulty'));
@@ -307,6 +360,18 @@ function attachEventListeners() {
             renderBoard();
             updateDisplay();
             closeMenuModal();
+        });
+    });
+
+    document.getElementById('closeRankingBtn').addEventListener('click', () => {
+        document.getElementById('rankingModal').classList.remove('active');
+    });
+
+    // Filtros de dificuldade no ranking
+    document.querySelectorAll('.ranking-filters .btn-small').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const difficulty = parseInt(e.currentTarget.getAttribute('data-difficulty'));
+            showRankingModal(difficulty);
         });
     });
 }

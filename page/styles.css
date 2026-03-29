@@ -397,3 +397,86 @@ body {
     color: var(--text-secondary);
     font-size: 1.1rem;
 }
+
+.ranking-content {
+    max-width: 500px;
+}
+
+.ranking-list {
+    background: var(--bg-primary);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.ranking-item {
+    display: grid;
+    grid-template-columns: 30px 1fr auto auto;
+    gap: 1rem;
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+    align-items: center;
+    font-size: 0.95rem;
+}
+
+.ranking-item:last-child {
+    border-bottom: none;
+}
+
+.ranking-position {
+    font-weight: 700;
+    color: var(--primary-light);
+    text-align: center;
+}
+
+.ranking-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.ranking-name {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.ranking-date {
+    color: var(--text-tertiary);
+    font-size: 0.85rem;
+}
+
+.ranking-stats {
+    display: flex;
+    gap: 1rem;
+    text-align: right;
+}
+
+.ranking-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.ranking-stat-label {
+    color: var(--text-tertiary);
+    font-size: 0.75rem;
+}
+
+.ranking-stat-value {
+    color: var(--primary-light);
+    font-weight: 600;
+}
+
+.ranking-filters {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.btn-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
