@@ -232,11 +232,35 @@ function enableAllCards() {
     });
 }
 
+function calculateScore() {
+    // Exemplo: 10000 / (tempo em segundos + movimentos)
+    const denominator = gameState.elapsedSeconds + gameState.moves;
+    if (denominator === 0) return 0;
+    return Math.round(10000 / denominator);
+}
+
+function saveScore() {
+    const score = {
+        time: formatTime(gameState.elapsedSeconds),
+        moves: gameState.moves,
+        difficulty: gameState.gridSize,
+        difficultyName: CONFIG.difficulties[gameState.currentDifficulty].name,
+        date: new Date().toLocaleDateString('pt-BR'),
+        score: calculateScore()
+    };
+    
+    let scores = JSON.parse(localStorage.getItem('memoryScores')) || [];
+    scores.push(score);
+    localStorage.setItem('memoryScores', JSON.stringify(scores));
+}
+
 function endGameVictory() {
     gameState.gameWon = true;
     gameState.gameOver = true;
     stopTimer();
     
+    saveScore();
+
     // Atualiza o número de movimentos no modal
     document.getElementById('finalMoves').textContent = gameState.moves;
     document.getElementById('finalTime').textContent = formatTime(gameState.elapsedSeconds);
