@@ -19,6 +19,7 @@ const gameState = {
     totalPairs: 8,
     moves: 0,
     timerStarted: false,
+    timerInterval: null,
     elapsedSeconds: 0,
     gameOver: false,
     gameWon: false
@@ -27,7 +28,8 @@ const gameState = {
 const DOM = {
     gameBoard: document.getElementById('gameBoard'),
     resetBtn: document.getElementById('resetBtn'),
-    movesDisplay: document.getElementById('moves')
+    movesDisplay: document.getElementById('moves'),
+    timerDisplay: document.getElementById('timer')
 };
 
 function initGame() {
@@ -45,6 +47,10 @@ function resetGameState() {
     gameState.elapsedSeconds = 0;
     gameState.timerStarted = false;
     gameState.gameWon = false;
+    if (gameState.timerInterval) {
+        clearInterval(gameState.timerInterval);
+        gameState.timerInterval = null;
+    }
     gameState.gameOver = false;
     gameState.gridSize = CONFIG.difficulties[gameState.currentDifficulty].size;
     gameState.totalPairs = (gameState.gridSize * gameState.gridSize) / 2;
@@ -102,6 +108,11 @@ function handleCardClick(cardId) {
     // Bloqueia se já está virada ou já é um par
     if (card.flipped || card.matched) return;
     
+    // Inicia o timer no primeiro clique
+    if (!gameState.timerStarted) {
+        startTimer();
+    }
+
     // Vira a carta
     card.flipped = true;
     gameState.flippedCards.push(card);
@@ -165,6 +176,31 @@ function checkMatch() {
 
 function updateDisplay() {
     DOM.movesDisplay.textContent = gameState.moves;
+    DOM.timerDisplay.textContent = formatTime(gameState.elapsedSeconds);
+}
+
+function startTimer() {
+    gameState.timerStarted = true;
+    gameState.timerInterval = setInterval(() => {
+        gameState.elapsedSeconds++;
+        updateDisplay();
+    }, 1000);
+}
+
+function stopTimer() {
+    if (gameState.timerInterval) {
+        clearInterval(gameState.timerInterval);
+        gameState.timerInterval = null;
+    }
+}
+
+function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    // Adiciona um zero à esquerda se for menor que 10
+    const paddedMinutes = String(minutes).padStart(2, '0');
+    const paddedSeconds = String(secs).padStart(2, '0');
+    return `${paddedMinutes}:${paddedSeconds}`;
 }
 
 function disableAllCards() {
@@ -182,12 +218,15 @@ function enableAllCards() {
 function endGameVictory() {
     gameState.gameWon = true;
     gameState.gameOver = true;
+    stopTimer();
     
     // Atualiza o número de movimentos no modal
     document.getElementById('finalMoves').textContent = gameState.moves;
+    document.getElementById('finalTime').textContent = formatTime(gameState.elapsedSeconds);
     
     // Exibe o modal de vitória
-    document.getElementById('victoryModal').classList.add('active');
+    // Adiciona um pequeno delay para a última carta terminar a animação
+    setTimeout(() => document.getElementById('victoryModal').classList.add('active'), 500);
 }
 
 function restartGame() {
