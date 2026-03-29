@@ -32,7 +32,9 @@ const gameState = {
 const DOM = {
     gameBoard: document.getElementById('gameBoard'),
     movesDisplay: document.getElementById('moves'),
-    timerDisplay: document.getElementById('timer')
+    timerDisplay: document.getElementById('timer'),
+    pairsDisplay: document.getElementById('pairs'),
+    totalPairsDisplay: document.getElementById('total-pairs')
 };
 
 function initGame() {
@@ -182,6 +184,8 @@ function checkMatch() {
 function updateDisplay() {
     DOM.movesDisplay.textContent = gameState.moves;
     DOM.timerDisplay.textContent = formatTime(gameState.elapsedSeconds);
+    DOM.pairsDisplay.textContent = gameState.matchedPairs;
+    DOM.totalPairsDisplay.textContent = gameState.totalPairs;
 }
 
 function showMenuModal() {
