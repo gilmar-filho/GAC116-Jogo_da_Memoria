@@ -26,7 +26,8 @@ const gameState = {
     timerInterval: null,
     elapsedSeconds: 0,
     gameOver: false,
-    gameWon: false
+    gameWon: false,
+    rankingOpen: false
 };
 
 const DOM = {
@@ -269,7 +270,7 @@ function endGameVictory() {
     setTimeout(() => document.getElementById('victoryModal').classList.add('active'), 500);
 }
 
-function showRankingModal(difficulty = gameState.currentDifficulty) {
+function renderRankingContent(difficulty = gameState.currentDifficulty) {
     const scores = JSON.parse(localStorage.getItem('memoryScores')) || [];
     
     // Filtra por dificuldade, ordena por score (maior primeiro) e pega o top 5
@@ -310,9 +311,16 @@ function showRankingModal(difficulty = gameState.currentDifficulty) {
     
     // Atualiza o título do modal com a dificuldade selecionada
     document.getElementById('rankingDifficulty').textContent = CONFIG.difficulties[difficulty].name;
-    
-    // Exibe o modal de ranking
-    document.getElementById('rankingModal').classList.add('active');
+}
+
+function toggleRankingPanel() {
+    gameState.rankingOpen = !gameState.rankingOpen;
+    document.body.classList.toggle('ranking-open', gameState.rankingOpen);
+    document.getElementById('rankingPanel').classList.toggle('active', gameState.rankingOpen);
+
+    if (gameState.rankingOpen) {
+        renderRankingContent();
+    }
 }
 
 function attachEventListeners() {
@@ -345,9 +353,7 @@ function attachEventListeners() {
     }
 
     if (rankingBtn) {
-        rankingBtn.addEventListener('click', () => {
-            showRankingModal(); // Usa a dificuldade atual por padrão
-        });
+        rankingBtn.addEventListener('click', toggleRankingPanel);
     }
 
     document.querySelectorAll('.btn-difficulty').forEach(btn => {
@@ -363,15 +369,13 @@ function attachEventListeners() {
         });
     });
 
-    document.getElementById('closeRankingBtn').addEventListener('click', () => {
-        document.getElementById('rankingModal').classList.remove('active');
-    });
+    document.getElementById('closeRankingBtn').addEventListener('click', toggleRankingPanel);
 
     // Filtros de dificuldade no ranking
     document.querySelectorAll('.ranking-filters .btn-small').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const difficulty = parseInt(e.currentTarget.getAttribute('data-difficulty'));
-            showRankingModal(difficulty);
+            renderRankingContent(difficulty);
         });
     });
 }

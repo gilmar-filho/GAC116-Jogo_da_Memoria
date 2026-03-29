@@ -26,12 +26,14 @@ body {
     color: var(--text-primary);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     min-height: 100vh;
+    overflow-x: hidden; /* Previne scrollbar durante a transição do painel */
 }
 
 .container {
     max-width: 1000px;
     margin: 0 auto;
     padding: 2rem;
+    transition: transform 0.5s ease-in-out;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -398,17 +400,39 @@ body {
     font-size: 1.1rem;
 }
 
+.ranking-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 400px;
+    max-width: 90vw;
+    height: 100%;
+    z-index: 900; /* Abaixo dos modais */
+    transform: translateX(100%);
+    transition: transform 0.5s ease-in-out;
+    box-shadow: var(--shadow-lg);
+}
+
+.ranking-panel.active {
+    transform: translateX(0);
+}
+
+body.ranking-open .container {
+    transform: translateX(-200px); /* Metade da largura do painel */
+}
+
 .ranking-content {
-    max-width: 500px;
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+    border-left: 1px solid var(--border-color);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    text-align: center;
 }
 
 .ranking-list {
-    background: var(--bg-primary);
-    border-radius: 0.5rem;
-    padding: 1rem;
-    margin-bottom: 1.5rem;
-    max-height: 400px;
-    overflow-y: auto;
+    flex-grow: 1; /* Faz a lista ocupar o espaço disponível */
 }
 
 .ranking-item {
