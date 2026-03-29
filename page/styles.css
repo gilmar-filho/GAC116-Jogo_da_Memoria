@@ -107,6 +107,48 @@ body {
     flex-wrap: wrap;
 }
 
+.stats-panel {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.stat {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.stat:hover {
+    background: #334155;
+    border-color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.stat-label {
+    display: block;
+    color: var(--text-tertiary);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}
+
+.stat-value {
+    display: block;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--primary-light);
+}
+
 .main {
     flex: 1;
     display: flex;

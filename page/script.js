@@ -26,13 +26,15 @@ const gameState = {
 
 const DOM = {
     gameBoard: document.getElementById('gameBoard'),
-    resetBtn: document.getElementById('resetBtn') // Adicionado para fácil acesso
+    resetBtn: document.getElementById('resetBtn'),
+    movesDisplay: document.getElementById('moves')
 };
 
 function initGame() {
     resetGameState();
     generateCards();
     renderBoard();
+    updateDisplay(); // Garante que o display comece em 0
 }
 
 function resetGameState() {
@@ -136,15 +138,6 @@ function checkMatch() {
             document.getElementById(`card-${card1.id}`).classList.add('matched');
             document.getElementById(`card-${card2.id}`).classList.add('matched');
             
-            // Incrementa movimentos
-            gameState.moves++;
-            
-            // Reseta flipped cards
-            gameState.flippedCards = [];
-            
-            // Desbloqueia cartas
-            enableAllCards();
-            
             // Verifica se ganhou
             if (gameState.matchedPairs === gameState.totalPairs) {
                 endGameVictory();
@@ -153,20 +146,25 @@ function checkMatch() {
             // NÃO é par - vira de volta
             card1.flipped = false;
             card2.flipped = false;
-            
             document.getElementById(`card-${card1.id}`).classList.remove('flipped');
             document.getElementById(`card-${card2.id}`).classList.remove('flipped');
-            
-            // Incrementa movimentos
-            gameState.moves++;
-            
-            // Reseta flipped cards
-            gameState.flippedCards = [];
-            
-            // Desbloqueia cartas
-            enableAllCards();
         }
+
+        // Incrementa movimentos e atualiza o display (lógica centralizada)
+        gameState.moves++;
+        updateDisplay();
+
+        // Reseta o array de cartas viradas
+        gameState.flippedCards = [];
+        
+        // Reabilita o clique nas cartas não combinadas
+        enableAllCards();
+
     }, 1000);
+}
+
+function updateDisplay() {
+    DOM.movesDisplay.textContent = gameState.moves;
 }
 
 function disableAllCards() {
