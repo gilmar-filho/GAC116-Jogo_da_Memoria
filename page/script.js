@@ -25,7 +25,8 @@ const gameState = {
 };
 
 const DOM = {
-    gameBoard: document.getElementById('gameBoard')
+    gameBoard: document.getElementById('gameBoard'),
+    resetBtn: document.getElementById('resetBtn') // Adicionado para fácil acesso
 };
 
 function initGame() {
@@ -200,9 +201,14 @@ function restartGame() {
 
 function attachEventListeners() {
     const restartBtn = document.getElementById('restartBtn');
-    
+
     if (restartBtn) {
         restartBtn.addEventListener('click', restartGame);
+    }
+
+    // O botão "Novo Jogo" faz a mesma coisa que o "Tentar Novamente": reinicia o jogo..
+    if (DOM.resetBtn) {
+        DOM.resetBtn.addEventListener('click', restartGame);
     }
 }
 
