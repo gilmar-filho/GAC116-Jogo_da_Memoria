@@ -42,6 +42,7 @@ function resetGameState() {
     gameState.elapsedSeconds = 0;
     gameState.timerStarted = false;
     gameState.gameWon = false;
+    gameState.gameOver = false;
     gameState.gridSize = CONFIG.difficulties[gameState.currentDifficulty].size;
     gameState.totalPairs = (gameState.gridSize * gameState.gridSize) / 2;
 }
@@ -182,12 +183,27 @@ function enableAllCards() {
 function endGameVictory() {
     gameState.gameWon = true;
     gameState.gameOver = true;
-    console.log('🎉 Você venceu!');
-    console.log(`Movimentos: ${gameState.moves}`);
+    
+    // Atualiza o número de movimentos no modal
+    document.getElementById('finalMoves').textContent = gameState.moves;
+    
+    // Exibe o modal de vitória
+    document.getElementById('victoryModal').classList.add('active');
+}
+
+function restartGame() {
+    // Esconde o modal de vitória
+    document.getElementById('victoryModal').classList.remove('active');
+    // Reinicia o jogo do zero
+    initGame();
 }
 
 function attachEventListeners() {
-    // Por enquanto vazio
+    const restartBtn = document.getElementById('restartBtn');
+    
+    if (restartBtn) {
+        restartBtn.addEventListener('click', restartGame);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
