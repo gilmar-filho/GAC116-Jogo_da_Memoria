@@ -6,8 +6,12 @@ const CONFIG = {
         10: { size: 10, name: 'Insano' }
     },
     defaultDifficulty: 4,
-    emojis: ['🎮', '🎨', '🎭', '🎪', '🎯', '🎲', '🎸', '🎺', 
-             '🎻', '🎳', '🎴', '🀄', '🧩', '🎀', '🎁', '🎊']
+    emojis: [
+        '🎮', '🎨', '🎭', '🎪', '🎯', '🎲', '🎸', '🎺', '🎻', '🎳', '🎴', '🀄', '🧩', '🎀', '🎁', '🎊',
+        '🎈', '🎉', '✨', '🎃', '🎄', '🎅', '👻', '👽', '👾', '🤖', '🧠', '👑', '💎', '💰', '🏆', '🥇',
+        '🥈', '🥉', '🚀', '🛸', '🚁', '🚂', '🚗', '🚓', '🚑', '🚒', '🚜', '🚲', '⚓', '⛵', '🚤', '🚢',
+        '⛰️', '🌋', '🏞️', '🏜️', '🏝️', '🏛️', '⛩️', '🕋', '🛰️', '💡', '💣', '🔑', '🛡️', '⚙️', '🧪', '🧲' // 52 emojis
+    ]
 };
 
 const gameState = {
@@ -27,16 +31,17 @@ const gameState = {
 
 const DOM = {
     gameBoard: document.getElementById('gameBoard'),
-    resetBtn: document.getElementById('resetBtn'),
     movesDisplay: document.getElementById('moves'),
     timerDisplay: document.getElementById('timer')
 };
 
 function initGame() {
     resetGameState();
+    // A dificuldade é definida pelos botões do menu agora
     generateCards();
     renderBoard();
     updateDisplay(); // Garante que o display comece em 0
+    showMenuModal();
 }
 
 function resetGameState() {
@@ -179,6 +184,14 @@ function updateDisplay() {
     DOM.timerDisplay.textContent = formatTime(gameState.elapsedSeconds);
 }
 
+function showMenuModal() {
+    document.getElementById('menuModal').classList.add('active');
+}
+
+function closeMenuModal() {
+    document.getElementById('menuModal').classList.remove('active');
+}
+
 function startTimer() {
     gameState.timerStarted = true;
     gameState.timerInterval = setInterval(() => {
@@ -225,28 +238,49 @@ function endGameVictory() {
     document.getElementById('finalTime').textContent = formatTime(gameState.elapsedSeconds);
     
     // Exibe o modal de vitória
-    // Adiciona um pequeno delay para a última carta terminar a animação
     setTimeout(() => document.getElementById('victoryModal').classList.add('active'), 500);
-}
-
-function restartGame() {
-    // Esconde o modal de vitória
-    document.getElementById('victoryModal').classList.remove('active');
-    // Reinicia o jogo do zero
-    initGame();
 }
 
 function attachEventListeners() {
     const restartBtn = document.getElementById('restartBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const menuBtn = document.getElementById('menuBtn');
 
     if (restartBtn) {
-        restartBtn.addEventListener('click', restartGame);
+        restartBtn.addEventListener('click', () => {
+            document.getElementById('victoryModal').classList.remove('active');
+            resetGameState();
+            generateCards();
+            renderBoard();
+            updateDisplay();
+        });
     }
 
-    // O botão "Novo Jogo" faz a mesma coisa que o "Tentar Novamente": reinicia o jogo..
-    if (DOM.resetBtn) {
-        DOM.resetBtn.addEventListener('click', restartGame);
+    if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+            resetGameState();
+            generateCards();
+            renderBoard();
+            updateDisplay();
+        });
     }
+
+    if (menuBtn) {
+        menuBtn.addEventListener('click', showMenuModal);
+    }
+
+    document.querySelectorAll('.btn-difficulty').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const difficulty = parseInt(e.currentTarget.getAttribute('data-difficulty'));
+            gameState.currentDifficulty = difficulty;
+            
+            resetGameState();
+            generateCards();
+            renderBoard();
+            updateDisplay();
+            closeMenuModal();
+        });
+    });
 }
 
 document.addEventListener('DOMContentLoaded', function() {

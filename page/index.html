@@ -29,9 +29,22 @@
             <div class="game-board" id="gameBoard"></div>
 
             <div class="controls">
+                <button class="btn btn-secondary" id="menuBtn">Menu</button>
                 <button class="btn btn-primary" id="resetBtn">Novo Jogo</button>
             </div>
         </main>
+    </div>
+
+    <div class="modal" id="menuModal">
+        <div class="modal-content">
+            <h2>Selecione a Dificuldade</h2>
+            <div class="difficulty-buttons">
+                <button class="btn btn-difficulty" data-difficulty="4">Fácil<br><small>4×4</small></button>
+                <button class="btn btn-difficulty" data-difficulty="6">Médio<br><small>6×6</small></button>
+                <button class="btn btn-difficulty" data-difficulty="8">Difícil<br><small>8×8</small></button>
+                <button class="btn btn-difficulty" data-difficulty="10">Insano<br><small>10×10</small></button>
+            </div>
+        </div>
     </div>
 
     <div class="modal" id="victoryModal">

@@ -107,8 +107,50 @@ body {
     flex-wrap: wrap;
 }
 
+.btn-secondary {
+    background: transparent;
+    color: var(--primary-light);
+    border: 2px solid var(--primary);
+}
+
+.btn-secondary:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-difficulty {
+    padding: 1.5rem 1rem;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 2px solid var(--border-color);
+    min-width: 120px;
+    font-size: 1.1rem;
+}
+
+.btn-difficulty:hover {
+    border-color: var(--primary);
+    background: #334155;
+    transform: translateY(-3px);
+}
+
+.btn-difficulty small {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    margin-top: 0.5rem;
+    font-weight: 400;
+}
+
+.difficulty-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
 .stats-panel {
     display: grid;
+    /* Preparamos o grid para 3 colunas, para os próximos stats */
     grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
     margin-bottom: 1rem;
