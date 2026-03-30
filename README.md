@@ -19,11 +19,15 @@ Você tem duas opções para fazer isso: **Clonando o Repositório** ou **Acessa
 
 ### Acessando o link do GitHub Pages
 
+Você pode jogar a versão mais recente diretamente no seu navegador através do link abaixo:
+
+➡️ **[Acesse o Jogo Online Aqui!](https://gilmar-filho.github.io/GAC116-Jogo_da_Memoria/page)** ⬅️
+
 ## ✨ Funcionalidades Principais
 
 -   **🎮 Múltiplos Níveis de Dificuldade:** Escolha entre 4x4 (Fácil), 6x6 (Médio), 8x8 (Difícil) e 10x10 (Insano).
 -   **⏱️ Timer e Contador de Movimentos:** Acompanhe seu desempenho em tempo real. O timer inicia no primeiro clique!
--   **🃏 Animação de Flip 3D:** As cartas viram com um efeito 3D suave, criado com `transform-style: preserve-3d`.
+-   **🃏 Animação de Flip 3D:** As cartas viram com um efeito 3D suave.
 -   **🏆 Ranking Persistente:** Seus melhores scores (tempo e movimentos) são salvos no `localStorage`!
 -   **📊 Painel de Ranking:** Visualize o Top 5 de scores para cada dificuldade, com um painel lateral elegante.
 -   **🎨 Design Moderno e Responsivo:** Tema escuro (dark mode) com uma paleta de cores vibrante e layout que se adapta a qualquer tela, do celular ao desktop.
